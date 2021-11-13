@@ -1,0 +1,107 @@
+<style>
+    body {
+        font-family: sans-serif;
+        margin: 0;
+        background-color: #333;
+    }
+    .timezone {
+        width: 50%;
+        height: 100%;
+        float: left;
+    }
+    #zone1 {
+
+    }
+    #zone2 {
+
+    }
+    .visible {
+        opacity: 1;
+        transition: 1s;
+    }
+    .hidden {
+        opacity: 0;
+        transition: 1s;
+    }
+    .time {
+        margin: 50% auto 0 auto;
+        font-size: 50px;
+        text-align: center;
+        font-weight: bold;
+    }
+    .location {
+        margin: 10px auto;
+        font-size: 18px;
+        text-align: center;
+    }
+</style>
+<div id="zone1" class="timezone">
+    <div id="time1" class="time">00:00</div>
+    <div id="location1" class="location">San Francisco</div>
+</div>
+<div id="zone2" class="timezone">
+    <div id="time2" class="time">00:00</div>
+    <div id="location2" class="location">Seville</div>
+</div>
+<script>
+function light(hour, id)  {
+    count = (hour -15 % 12);
+    transparency = Math.abs( Math.round(100*(count)/12)/100 );
+    //console.log(hour+"h " + count + "c " + transparency + "-> "+ id);
+    document.getElementById(id).style.backgroundColor="rgba(250, 250, 250, " + transparency + ")"
+    
+}
+function simple_time(time_str, id) {
+    t = time_str.split(':');
+    return t[0] + "<span class='colon'>:</span>" + t[1];
+}
+function blink_time(time_str) {
+    s = time_str.split(':')[2];
+    cclass = "colon visible";
+    if (s % 2 == 0) {
+        cclass = 'colon hidden';
+    }
+    var all = document.getElementsByClassName('colon');
+    for (var i = 0; i < all.length; i++) {
+        all[i].className = cclass; 
+    }
+}
+function currentTime() {
+    let date = new Date(); 
+
+    // Current
+
+    let hh = date.getHours();
+    let mm = date.getMinutes();
+    let ss = date.getSeconds();
+
+    hh = (hh < 10) ? "0" + hh : hh;
+    mm = (mm < 10) ? "0" + mm : mm;
+    ss = (ss < 10) ? "0" + ss : ss;
+
+    let time2 = hh + ":" + mm + ":" + ss;
+
+    document.getElementById("time2").innerHTML = simple_time(time2); 
+    light(time2.split(':')[0], "zone2")
+ 
+    // San Francisco
+
+    let options = {
+        timeZone: 'America/Los_Angeles',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: false
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+    time1 = formatter.format(date); 
+    document.getElementById("time1").innerHTML = simple_time(time1);
+    light(time1.split(':')[0], "zone1")
+
+    // General instructions
+    
+    blink_time(time2)
+    let t = setTimeout(function(){ currentTime() }, 1000);
+}
+currentTime();
+</script>
