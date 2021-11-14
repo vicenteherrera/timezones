@@ -35,24 +35,25 @@
     .credit {
         position: absolute;
         bottom: 20px;
-        right: 30px;
+        right: 20px;
         font-size: 12px;
+    }
+    .credit a {
         background-color: rgb(26, 22, 53);
         border-radius: 5px;
-
-        text-align: center;
         padding: 4px 10px;
-    }
-    .credit  { 
         color: rgb(116, 211, 211); 
         text-decoration: none;
     }
-    .credit:hover {
+    .credit a:hover {
         background-color: orangered;
         color: black;
     }
 </style>
-<a class="credit" href="https://twitter.com/vicen_herrera" target="_blank">@vicen_herrera</a></div>
+<div class="credit">
+<a href="https://github.com/vicenteherrera/timezones" target="_blank">GitHub</a>
+<a href="https://twitter.com/vicen_herrera" target="_blank">@vicen_herrera</a>
+</div>
 <script>
 function createZones(zones) {
     document.writeln('<style> .timezone { width:'+ (100/zones.length) + '%; } </style>');
