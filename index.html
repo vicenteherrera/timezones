@@ -39,6 +39,14 @@
             margin: 10px auto;
             font-size: 18px;
         }
+        .offset {
+            font-size: 11px;
+            border:0;
+            border-top: 1px solid #444;
+            border-style: dashed;
+            color: #444;
+            padding-top: 7px;
+        }
         .credit {
             position: absolute;
             bottom: 20px;
@@ -66,20 +74,41 @@
     <script>
     function createZones(zones) {
         document.writeln('<style> .timezone { width:'+ (100/zones.length) + '%; } </style>');
-        zones.sort(compare);
+        zones.sort(compareByOffset);
 
         for (i=0; i<zones.length; i++) {
+            offset = getTimezoneOffset(zones[i].timezone);
+            if (offset>=0) offset = '+' + offset;
             document.writeln('<div id="zone'+i+'" class="timezone">');
             document.writeln('<div class="info">');  
             document.writeln('<div id="time'+i+'" class="time">00:00</div>');
             document.writeln('<div id="location'+i+'" class="location">'+zones[i].location+'</div>');
+            document.writeln('<div class="offset">UTC ' + offset +' h</div>');
             document.writeln('</div></div>');
         }
     }
-    function compare(zone1, zone2) {
+    function compareByHour(zone1, zone2) {
         if (getHour(zone1.timezone) < getHour(zone2.timezone)) return -1
         if (getHour(zone1.timezone) > getHour(zone2.timezone)) return 1
         return 0
+    }
+    function compareByOffset(zone1, zone2) {
+        h1 = getTimezoneOffset(zone1.timezone);
+        h2 = getTimezoneOffset(zone2.timezone);
+        if (h1 < h2) return -1
+        if (h1 > h2) return 1
+        return 0
+    }
+    const getTimezoneOffset = (timeZone, date = new Date()) => {
+        const tz = date.toLocaleString("en", {
+            timeZone,
+            timeStyle: "long"
+        }).split(" ").slice(-1)[0];
+        const dateString = date.toString();
+        const offset = Date.parse(`${dateString} UTC`) - Date.parse(`${dateString} ${tz}`);
+
+        // return UTC offset in hours
+        return offset/(60*60*1000);
     }
     function light(hour, id)  {
         count = (hour -15 % 12);
@@ -134,7 +163,6 @@
 
 
     // Bootstrap
-
     var zones = [
         {
             "location": "San Francisco",
