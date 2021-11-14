@@ -1,154 +1,165 @@
-<style>
-    body {
-        font-family: sans-serif;
-        margin: 0;
-        background-color: #333;
-    }
-    .visible {
-        opacity: 1;
-        transition: 1s;
-    }
-    .hidden {
-        opacity: 0;
-        transition: 1s;
-    }
-    .timezone {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        float: left;
-    }
-    .info {
-        height: 150px;
-        margin-bottom: 50px;
-    }
-    .time {
-        font-size: 50px;
-        font-weight: bold;
-    }
-    .location {
-        margin: 10px auto;
-        font-size: 18px;
-    }
-    .credit {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        font-size: 12px;
-    }
-    .credit a {
-        background-color: rgb(26, 22, 53);
-        border-radius: 5px;
-        padding: 4px 10px;
-        color: rgb(116, 211, 211); 
-        text-decoration: none;
-    }
-    .credit a:hover {
-        background-color: orangered;
-        color: black;
-    }
-</style>
-<div class="credit">
-<a href="https://github.com/vicenteherrera/timezones" target="_blank">GitHub</a>
-<a href="https://twitter.com/vicen_herrera" target="_blank">@vicen_herrera</a>
-</div>
-<script>
-function createZones(zones) {
-    document.writeln('<style> .timezone { width:'+ (100/zones.length) + '%; } </style>');
-    zones.sort(compare);
+<!DOCTYPE html>
+<html>
+<head>    
+    <meta charset = "UTF-8">
+    <title>Timezones</title>
+    <style>
+        html, body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: #333;
+            height: 100%;
+            width: 100%;
+        }
+        .visible {
+            opacity: 1;
+            transition: 1s;
+        }
+        .hidden {
+            opacity: 0;
+            transition: 1s;
+        }
+        .timezone {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            float: left;
+        }
+        .info {
+            height: 150px;
+            margin-bottom: 50px;
+        }
+        .time {
+            font-size: 50px;
+            font-weight: bold;
+        }
+        .location {
+            margin: 10px auto;
+            font-size: 18px;
+        }
+        .credit {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 12px;
+        }
+        .credit a {
+            background-color: rgb(26, 22, 53);
+            border-radius: 5px;
+            padding: 4px 10px;
+            color: rgb(116, 211, 211); 
+            text-decoration: none;
+        }
+        .credit a:hover {
+            background-color: orangered;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="credit">
+        <a href="https://github.com/vicenteherrera/timezones" target="_blank">GitHub</a>
+        <a href="https://twitter.com/vicen_herrera" target="_blank">@vicen_herrera</a>
+    </div>
+    <script>
+    function createZones(zones) {
+        document.writeln('<style> .timezone { width:'+ (100/zones.length) + '%; } </style>');
+        zones.sort(compare);
 
-    for (i=0; i<zones.length; i++) {
-        document.writeln('<div id="zone'+i+'" class="timezone">');
-        document.writeln('<div class="info">');  
-        document.writeln('<div id="time'+i+'" class="time">00:00</div>');
-        document.writeln('<div id="location'+i+'" class="location">'+zones[i].location+'</div>');
-        document.writeln('</div></div>');
+        for (i=0; i<zones.length; i++) {
+            document.writeln('<div id="zone'+i+'" class="timezone">');
+            document.writeln('<div class="info">');  
+            document.writeln('<div id="time'+i+'" class="time">00:00</div>');
+            document.writeln('<div id="location'+i+'" class="location">'+zones[i].location+'</div>');
+            document.writeln('</div></div>');
+        }
     }
-}
-function compare(zone1, zone2) {
-    if (getHour(zone1.timezone) < getHour(zone2.timezone)) return -1
-    if (getHour(zone1.timezone) > getHour(zone2.timezone)) return 1
-    return 0
-}
-function light(hour, id)  {
-    count = (hour -15 % 12);
-    transparency = Math.abs( Math.round(100*(count)/12)/100 );
-    //console.log(hour+"h " + count + "c " + transparency + "-> "+ id);
-    document.getElementById(id).style.backgroundColor="rgba(250, 250, 250, " + transparency + ")"
-}
-function simple_time(time_str, id) {
-    t = time_str.split(':');
-    return t[0] + "<span class='colon'>:</span>" + t[1];
-}
-function blink_time(time_str) {
-    s = time_str.split(':')[2];
-    cclass = "colon visible";
-    if (s % 2 == 0) {
-        cclass = 'colon hidden';
+    function compare(zone1, zone2) {
+        if (getHour(zone1.timezone) < getHour(zone2.timezone)) return -1
+        if (getHour(zone1.timezone) > getHour(zone2.timezone)) return 1
+        return 0
     }
-    var all = document.getElementsByClassName('colon');
-    for (var i = 0; i < all.length; i++) {
-        all[i].className = cclass; 
+    function light(hour, id)  {
+        count = (hour -15 % 12);
+        transparency = Math.abs( Math.round(100*(count)/12)/100 );
+        //console.log(hour+"h " + count + "c " + transparency + "-> "+ id);
+        document.getElementById(id).style.backgroundColor="rgba(250, 250, 250, " + transparency + ")"
     }
-}
-function getDateTimeFormatter(timezone){
-    options = {
-        timeZone: timezone,
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        hour12: false
-    };
-    formatter = new Intl.DateTimeFormat([], options);
-    return formatter;
-}
-function getHour(timezone){
-    date = new Date();
-    formatter = getDateTimeFormatter(timezone)
-    time = formatter.format(date);
-    return time.split(":")[0];
-}
-function currentTime() {
-    let date = new Date();
-    for (i=0; i<zones.length; i++) {
-        formatter = getDateTimeFormatter(zones[i].timezone)
-        time1 = formatter.format(date); 
-        document.getElementById("time"+i).innerHTML = simple_time(time1);
-        light(time1.split(':')[0], "zone"+i)
+    function simple_time(time_str, id) {
+        t = time_str.split(':');
+        return t[0] + "<span class='colon'>:</span>" + t[1];
     }
-    // General instructions
-    blink_time(formatter.format(date))
-    let t = setTimeout(function(){ currentTime() }, 1000);
-}
+    function blink_time(time_str) {
+        s = time_str.split(':')[2];
+        cclass = "colon visible";
+        if (s % 2 == 0) {
+            cclass = 'colon hidden';
+        }
+        var all = document.getElementsByClassName('colon');
+        for (var i = 0; i < all.length; i++) {
+            all[i].className = cclass; 
+        }
+    }
+    function getDateTimeFormatter(timezone){
+        options = {
+            timeZone: timezone,
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: false
+        };
+        formatter = new Intl.DateTimeFormat([], options);
+        return formatter;
+    }
+    function getHour(timezone){
+        date = new Date();
+        formatter = getDateTimeFormatter(timezone)
+        time = formatter.format(date);
+        return time.split(":")[0];
+    }
+    function currentTime() {
+        let date = new Date();
+        for (i=0; i<zones.length; i++) {
+            formatter = getDateTimeFormatter(zones[i].timezone)
+            time1 = formatter.format(date); 
+            document.getElementById("time"+i).innerHTML = simple_time(time1);
+            light(time1.split(':')[0], "zone"+i)
+        }
+        // General instructions
+        blink_time(formatter.format(date))
+        let t = setTimeout(function(){ currentTime() }, 1000);
+    }
 
 
-// Bootstrap
+    // Bootstrap
 
-var zones = [
-    {
-        "location": "San Francisco",
-        "timezone": "America/Los_Angeles"
-    },
-    {
-        "location": "Spain<br>Milan",
-        "timezone": "Europe/Madrid"
-    },
-    {
-        "location": "London",
-        "timezone": "Europe/London"
-    },
-    {
-        "location": "New York<br>Boston",
-        "timezone": "America/New_York"
-    },
-    {
-        "location": "Tokyo",
-        "timezone": "Japan"
-    }
-];
-createZones(zones);
-currentTime();
+    var zones = [
+        {
+            "location": "San Francisco",
+            "timezone": "America/Los_Angeles"
+        },
+        {
+            "location": "Spain<br>Milan",
+            "timezone": "Europe/Madrid"
+        },
+        {
+            "location": "London",
+            "timezone": "Europe/London"
+        },
+        {
+            "location": "New York<br>Boston",
+            "timezone": "America/New_York"
+        },
+        {
+            "location": "Tokyo",
+            "timezone": "Japan"
+        }
+    ];
+    createZones(zones);
+    currentTime();
 
-</script>
+    </script>
+</body>
+</html>

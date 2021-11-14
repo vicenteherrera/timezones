@@ -1,11 +1,6 @@
 title: Timezones
 
-remote_theme: vicenteherrera/jekyll-theme-vicenteherrera@main
-
 google_analytics: 
 
 sass:
   style: compressed
-
-plugins:
-  - jekyll-remote-theme
