@@ -52,14 +52,6 @@
         color: black;
     }
 </style>
-<!-- <div id="zone1" class="timezone">
-    <div id="time1" class="time">00:00</div>
-    <div id="location1" class="location">San Francisco</div>
-</div>
-<div id="zone2" class="timezone">
-    <div id="time2" class="time">00:00</div>
-    <div id="location2" class="location">Seville</div>
-</div> -->
 <a class="credit" href="https://twitter.com/vicen_herrera" target="_blank">@vicen_herrera</a></div>
 <script>
 function createZones(zones) {
@@ -100,8 +92,7 @@ function blink_time(time_str) {
         all[i].className = cclass; 
     }
 }
-function getHour(timezone){
-    date = new Date();
+function getDateTimeFormatter(timezone){
     options = {
         timeZone: timezone,
         hour: 'numeric',
@@ -110,26 +101,22 @@ function getHour(timezone){
         hour12: false
     };
     formatter = new Intl.DateTimeFormat([], options);
+    return formatter;
+}
+function getHour(timezone){
+    date = new Date();
+    formatter = getDateTimeFormatter(timezone)
     time = formatter.format(date);
     return time.split(":")[0];
 }
 function currentTime() {
     let date = new Date();
-
     for (i=0; i<zones.length; i++) {
-        options = {
-            timeZone: zones[i].timezone,
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-            hour12: false
-        };
-        formatter = new Intl.DateTimeFormat([], options);
+        formatter = getDateTimeFormatter(zones[i].timezone)
         time1 = formatter.format(date); 
         document.getElementById("time"+i).innerHTML = simple_time(time1);
         light(time1.split(':')[0], "zone"+i)
     }
-
     // General instructions
     blink_time(formatter.format(date))
     let t = setTimeout(function(){ currentTime() }, 1000);
