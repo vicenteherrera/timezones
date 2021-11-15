@@ -7,7 +7,7 @@
         html, body {
             font-family: sans-serif;
             margin: 0;
-            background-color: #333;
+            background-color: #01012f;
             height: 100%;
             width: 100%;
         }
@@ -110,11 +110,11 @@
         // return UTC offset in hours
         return offset/(60*60*1000);
     }
+    
     function light(hour, id)  {
         count = 1 - Math.abs( (12 - hour)/12);
-        transparency = Math.abs( Math.round(100*count)/100 );
-        //console.log(hour+"h " + transparency + "-> "+ id);
-        document.getElementById(id).style.backgroundColor="rgba(250, 250, 250, " + transparency + ")"
+        transparency = Math.round(100*count)/100;
+        document.getElementById(id).style.backgroundColor="rgba(253, 212, 96, " + transparency + ")"
     }
     function simple_time(time_str, id) {
         t = time_str.split(':');
