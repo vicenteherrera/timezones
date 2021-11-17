@@ -115,7 +115,7 @@
         count = 1 - Math.abs( (12 - hour)/12);
         transparency = Math.round(100*count)/100;
         document.getElementById("zone"+num).style.backgroundColor="rgba(253, 212, 96, " + transparency + ")"
-        if (transparency < 0.20) {
+        if (transparency < 0.35) {
             document.getElementById("time"+num).style.color="#aaa";
             document.getElementById("location"+num).style.color="#aaa";
         }
