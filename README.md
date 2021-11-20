@@ -33,4 +33,6 @@ var zones = [
 ];
 ```
 
+You can check this nice list of all available [timezone name definitions](https://docs.trifacta.com/display/DP/Supported+Time+Zone+Values). The order of the zones is rearrange for display in increased difference with local time.
+
 You can fork this repo and publish your modification as a GitHub page, or download the `index.html` file and use locally or upload it to your own server.
