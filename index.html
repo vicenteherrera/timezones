@@ -35,16 +35,6 @@
             font-size: 50px;
             font-weight: bold;
         }
-        @media screen and (max-width: 1200px) {
-            .time {
-                font-size: 42px;
-            }
-        }
-        @media screen and (max-width: 1000px) {
-            .time {
-                font-size: 35px;
-            }
-        }
         .location {
             margin: 10px auto;
             font-size: 18px;
@@ -56,6 +46,40 @@
             border-style: dashed;
             color: #444;
             padding-top: 7px;
+        }
+        @media screen and (max-width: 1440px) {
+            .time {
+                font-size: 38px;
+            }
+            .location {
+                font-size: 14px;
+            }
+            .offset {
+                font-size: 9px;
+            }
+        }
+        @media screen and (max-width: 1124px) {
+            .time {
+                font-size: 32px;
+            }
+            .location {
+                font-size: 12px;
+            }
+            .offset {
+                font-size: 7px;
+            }
+        }
+        @media screen and (max-width: 900px) {
+            .time {
+                font-size: 26px;
+            }
+            .location {
+                font-size: 11px;
+            }
+            .offset {
+                font-size: 6px;
+            }
+
         }
         .credit {
             position: absolute;
@@ -215,7 +239,15 @@
         {
             "location": "Tokyo",
             "timezone": "Japan"
-        }
+        },
+        {
+            "location": "Texas",
+            "timezone": "US/Central"
+        },
+        {
+            "location": "New Zealand",
+            "timezone": "Pacific/Auckland"
+        },        
     ];
     createZones(zones);
     currentTime();
