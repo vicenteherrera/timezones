@@ -35,6 +35,12 @@
         .time {
             font-size: 50px;
             font-weight: bold;
+            padding: 1 6px;
+            border-radius: 5px;
+        }
+        .time.home {
+            border: 1px solid gray;
+            padding: 0 5px;
         }
         .location {
             margin: 10px auto;
@@ -123,13 +129,20 @@
     function createZones(zones) {
         document.writeln('<style> .timezone { width:'+ (100/zones.length) + '%; } </style>');
         zones.sort(compareByOffset);
-
+        date = new Date()
+        homeTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+        
         for (i=0; i<zones.length; i++) {
+            homeClass=""
             offset = getTimezoneOffset(zones[i].timezone);
+            if (homeTimezone == zones[i].timezone) {
+                homeClass="home"
+            }
+            console.log (homeTimezone + "_" + zones[i].timezone)
             if (offset>=0) offset = '+' + offset;
             document.writeln('<div id="zone'+i+'" class="timezone">');
             document.writeln('<div class="info">');  
-            document.writeln('<div id="time'+i+'" class="time">00:00</div>');
+            document.writeln('<div id="time'+i+'" class="time '+homeClass+'">00:00</div>');
             document.writeln('<div id="location'+i+'" class="location">'+zones[i].location+'</div>');
             document.writeln('<div id="offset'+i+'" class="offset">UTC ' + offset +' h</div>');
             document.writeln('</div></div>');
