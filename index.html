@@ -10,6 +10,7 @@
             background-color: #01012f;
             height: 100%;
             width: 100%;
+            overflow: hidden; /* Hide scrollbars */
         }
         .visible {
             opacity: 1;
@@ -102,10 +103,23 @@
 </head>
 <body>
     <div class="credit">
+        <a href="#" onclick="javascript: return showHideRange();">adjust time</a>
         <a href="https://github.com/vicenteherrera/timezones" target="_blank">GitHub</a>
         <a href="https://twitter.com/v1z3n" target="_blank">@v1z3n</a>
     </div>
+    <input type="range" id="offset" min="-12" max="12" step="1"
+        style="width:100%; display: none;" 
+        onchange="javascript:currentTime()" oninput="javascript:currentTime()"
+    />
     <script>
+    function showHideRange() {
+        if ( document.getElementById("offset").style.display=="none" ) {
+            document.getElementById("offset").style.display="inline-block"
+        } else {
+            document.getElementById("offset").style.display="none"
+        }
+        return false
+    }
     function createZones(zones) {
         document.writeln('<style> .timezone { width:'+ (100/zones.length) + '%; } </style>');
         zones.sort(compareByOffset);
@@ -179,7 +193,12 @@
             all[i].className = cclass; 
         }
     }
+
+    var formatter = [];
     function getDateTimeFormatter(timezone){
+        if (formatter[timezone]!=undefined) {
+            return formatter[timezone]
+        }
         options = {
             timeZone: timezone,
             hour: 'numeric',
@@ -187,20 +206,25 @@
             second: 'numeric',
             hour12: false
         };
-        formatter = new Intl.DateTimeFormat([], options);
-        return formatter;
+        formatter[timezone] = new Intl.DateTimeFormat([], options);
+        return formatter[timezone];
     }
-    function getHour(timezone){
+
+    function getHour(timezone) {
         date = new Date();
         formatter = getDateTimeFormatter(timezone)
         time = formatter.format(date);
-        return time.split(":")[0];
+        hour = time.split(":")[0];
+        // hour += document.getElementById("offset").value
+        console.log(hour)
+        return hour
     }
     function currentTime() {
         let date = new Date();
         for (i=0; i<zones.length; i++) {
             formatter = getDateTimeFormatter(zones[i].timezone)
-            time1 = formatter.format(date); 
+            time1 = formatter.format(date);
+            time1 = adjust(time1,offset)
             document.getElementById("time"+i).innerHTML = simple_time(time1);
             light(time1.split(':')[0], i)
         }
@@ -208,7 +232,13 @@
         blink_time(formatter.format(date))
         let t = setTimeout(function(){ currentTime() }, 1000);
     }
-
+    function adjust(time_str, offset) {
+        hour = time_str.split(":")[0]
+        minute = time_str.split(":")[1]
+        hour = parseInt(hour) + parseInt(document.getElementById("offset").value)
+        hour = (hour % 24 + 24) % 24
+        return hour + ":" + minute
+    }
 
     // Bootstrap
     var zones = [
