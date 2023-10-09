@@ -28,6 +28,40 @@
             text-align: center;
             float: left;
         }
+
+        /* day timezone colors */
+        .time.home { 
+            background-color: #000;
+        }
+        .timezone .time {
+            color: #000;
+        }
+        .timezone .time.home { 
+            background-color: #aaa;
+        }
+        .timezone .location {
+            color: #000;
+        }
+        .timezone .offset {
+            color: #000;
+            border-top: 1px dashed #444;
+        }
+
+        /* night timezone colors */
+        .night.timezone .time {
+            color: #aaa;
+        }
+        .night.timezone .time.home { 
+            background-color: #000;
+        }
+        .night.timezone .location {
+            color: #aaa;
+        }
+        .night.timezone .offset {
+            color: #aaa;
+            border-top: 1px dashed #777;
+        }
+
         .info {
             height: 150px;
             margin-bottom: 50px;
@@ -130,9 +164,7 @@
     function createZones(zones) {
         document.writeln('<style> .timezone { width:'+ (100/zones.length) + '%; } </style>');
         zones.sort(compareByOffset);
-        date = new Date()
         homeTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
-        
         for (i=0; i<zones.length; i++) {
             homeClass=""
             offset = getTimezoneOffset(zones[i].timezone);
@@ -168,30 +200,18 @@
         }).split(" ").slice(-1)[0];
         const dateString = date.toString();
         const offset = Date.parse(`${dateString} UTC`) - Date.parse(`${dateString} ${tz}`);
-
         // return UTC offset in hours
         return offset/(60*60*1000);
     }
-    
     function light(hour, num)  {
         count = 1 - Math.abs( (12 - hour)/12);
         transparency = Math.round(100*count)/100;
         document.getElementById("zone"+num).style.backgroundColor="rgba(253, 212, 96, " + transparency + ")"
         if (transparency < 0.35) {
-            document.getElementById("time"+num).style.color="#aaa";
-            document.getElementById("location"+num).style.color="#aaa";
-            document.getElementById("location"+num).style.color="#aaa";
-            document.getElementById("offset"+num).style.color="#aaa";
-            document.getElementById("offset"+num).style.borderTop="1px dashed #777";
-            document.getElementsByClassName("home")[0].style.backgroundColor="#000";
+            document.getElementById("zone"+num).className="timezone night";
         } else {
             // Reset state in case you leave the website all day running
-            document.getElementById("time"+num).style.color="#000";
-            document.getElementById("location"+num).style.color="#000";
-            document.getElementById("location"+num).style.color="#000";
-            document.getElementById("offset"+num).style.color="#000";
-            document.getElementById("offset"+num).style.borderTop="1px dashed #444";
-            document.getElementsByClassName("home")[0].style.backgroundColor="#aaa";
+            document.getElementById("zone"+num).className="timezone";
         }
     }
     function simple_time(time_str, id) {
@@ -231,7 +251,6 @@
         formatter = getDateTimeFormatter(timezone)
         time = formatter.format(date);
         hour = time.split(":")[0];
-        // hour += document.getElementById("offset").value
         console.log(hour)
         return hour
     }
@@ -255,7 +274,6 @@
         hour = (hour % 24 + 24) % 24
         return hour + ":" + minute
     }
-
     // Bootstrap
     var zones = [
         {
@@ -297,7 +315,6 @@
     ];
     createZones(zones);
     currentTime();
-
     </script>
 </body>
 </html>
