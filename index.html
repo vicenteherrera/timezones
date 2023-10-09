@@ -35,12 +35,13 @@
         .time {
             font-size: 50px;
             font-weight: bold;
-            padding: 1 6px;
+            padding: 1px 6px;
             border-radius: 5px;
         }
         .time.home {
             border: 1px solid gray;
             padding: 0 5px;
+            background-color: #000;
         }
         .location {
             margin: 10px auto;
@@ -182,6 +183,7 @@
             document.getElementById("location"+num).style.color="#aaa";
             document.getElementById("offset"+num).style.color="#aaa";
             document.getElementById("offset"+num).style.borderTop="1px dashed #777";
+            document.getElementsByClassName("home")[0].style.backgroundColor="#000";
         } else {
             // Reset state in case you leave the website all day running
             document.getElementById("time"+num).style.color="#000";
@@ -189,6 +191,7 @@
             document.getElementById("location"+num).style.color="#000";
             document.getElementById("offset"+num).style.color="#000";
             document.getElementById("offset"+num).style.borderTop="1px dashed #444";
+            document.getElementsByClassName("home")[0].style.backgroundColor="#aaa";
         }
     }
     function simple_time(time_str, id) {
